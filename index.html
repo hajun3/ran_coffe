@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Group of Three People</title>
+  </head>
+  <body>
+    <h1>Group of Three People</h1>
+    
+    <p>Enter the list of people:</p>
+    <textarea id="input" rows="10" cols="50"></textarea>
+    
+    <p>Groups:</p>
+    <ul id="output"></ul>
+    
+    <button onclick="groupPeople()">Group</button>
+    
+    <script>
+      function groupPeople() {
+        // Get the input text and split it into an array
+        var inputText = document.getElementById("input").value;
+        var people = inputText.trim().split("\n");
+        
+        // Shuffle the array randomly
+        shuffleArray(people);
+        
+        // Group the people into groups of three
+        var groups = [];
+        while (people.length > 0) {
+          if (people.length >= 3) {
+            groups.push([people.shift(), people.shift(), people.shift()]);
+          } else {
+            groups.push(people.slice());
+            people = [];
+          }
+        }
+        
+        // Sort each group by the number in parentheses
+        groups.forEach(function(group) {
+          group.sort(function(a, b) {
+            var aNum = parseInt(a.match(/\((\d+)\)/)[1]);
+            var bNum = parseInt(b.match(/\((\d+)\)/)[1]);
+            return aNum - bNum;
+          });
+        });
+        
+        // Display the groups in the output list
+        var outputList = document.getElementById("output");
+        outputList.innerHTML = "";
+        groups.forEach(function(group) {
+          var listItem = document.createElement("li");
+          listItem.textContent = group.join(", ");
+          outputList.appendChild(listItem);
+        });
+      }
+      
+      function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+        }
+      }
+    </script>
+  </body>
+</html>
